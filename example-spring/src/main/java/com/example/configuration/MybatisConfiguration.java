@@ -11,6 +11,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.example.mvc.parameter.BoardParameter;
+
 
 
 /**
@@ -18,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
  * Mybatis 설정
  */
 @Configuration
-@MapperScan(basePackages = "com.example.mvc.repository")
+@MapperScan(basePackages = {"com.example.mvc.boardDao", "com.example.mvc.stateDao"})
 public class MybatisConfiguration {
 
     @Bean
@@ -35,4 +37,5 @@ public class MybatisConfiguration {
     SqlSessionTemplate sqlSessionTemplate(@Autowired SqlSessionFactory sqlSessionFactory) {
     	return new SqlSessionTemplate(sqlSessionFactory);
     }
+
 }

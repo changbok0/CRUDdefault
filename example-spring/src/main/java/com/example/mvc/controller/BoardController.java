@@ -3,7 +3,7 @@ package com.example.mvc.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.mvc.domain.Board;
+import com.example.mvc.domain.BoardModel;
 import com.example.mvc.parameter.BoardParameter;
 import com.example.mvc.service.BoardService;
 
@@ -31,6 +31,7 @@ import io.swagger.annotations.ApiOperation;
 public class BoardController {
 	
 	@Autowired
+	@Qualifier("boardService")
 	private BoardService boardService;
 	
 	/**
@@ -39,7 +40,7 @@ public class BoardController {
 	 */
 	@GetMapping("/selectAll")
 	@ApiOperation(value = "목록 조회", notes = "게시물 목록 조회가 가능합니다.")
-	public List<Board> getList() {
+	public List<BoardModel> getList() {
 		return boardService.getList();
 	};
 	
@@ -53,7 +54,7 @@ public class BoardController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="boardSeq", value="게시물번호", example="1")
 	})
-	public Board get(@PathVariable int boardSeq) {
+	public BoardModel get(@PathVariable int boardSeq) {
 		return boardService.get(boardSeq);
 	};
 	
@@ -69,7 +70,7 @@ public class BoardController {
 	@ApiImplicitParam(name="contents", value="내용", example="spring 강좌"),
 	})
 	public int save(BoardParameter parameter) {
-		boardService.save(parameter);
+		boardService.insert(parameter);
 		return parameter.getBoardSeq();
 	};
 	
@@ -84,7 +85,7 @@ public class BoardController {
 		@ApiImplicitParam(name="boardSeq", value="게시물번호", example="1"),
 	})
 	public boolean delete(@PathVariable int boardSeq) {
-		Board board = boardService.get(boardSeq);
+		BoardModel board = boardService.get(boardSeq);
 		if (board == null) {
 			return false;
 		}

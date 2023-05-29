@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mvc.stateDao.StateDao">
+
+	<select id="getStateList" resultType="com.example.mvc.parameter.StateGetDto">	
+		SELECT
+		    S.first_state,
+		    S.second_state,
+		    S.third_state,
+		    c.title,
+		    c.contents,
+		    c.regDate
+	    FROM STATE_CHECK S
+	    INNER JOIN 
+	    	contents c 	
+	    WHERE s.cuid = c.cuid
+	    AND		DATE(c.regDate) = CURDATE();  
+	</select>
+	
+	
+	<insert id="insertState" parameterType="java.util.List" >
+        INSERT INTO sns
+        (
+            msg,
+            regDate
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=" , " >
+        	(concat(#{item.title},#{item.contents},#{item.regDate},' ','임시 메세지 내용입니다.'),NOW())
+        </foreach>
+	</insert>
+
+	
+</mapper>

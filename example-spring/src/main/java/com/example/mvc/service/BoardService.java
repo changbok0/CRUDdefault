@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.mvc.domain.Board;
+import com.example.mvc.boardDao.BoardDao;
+import com.example.mvc.domain.BoardModel;
 import com.example.mvc.parameter.BoardParameter;
-import com.example.mvc.repository.BoardRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,15 +22,15 @@ import lombok.RequiredArgsConstructor;
 public class BoardService {
 	
 	@Autowired
-	private BoardRepository repository;
+	private BoardDao boardDao;
 	
 	
 	/**
 	 * @return
 	 * 목록 리턴.
 	 */
-	public List<Board> getList() {
-		return repository.getList();
+	public List<BoardModel> getList() {
+		return boardDao.getList();
 	};
 	
 	/**
@@ -38,8 +38,8 @@ public class BoardService {
 	 * @return
 	 * 상세정보 리턴.
 	 */
-	public Board get(int boardSeq) {
-		return repository.get(boardSeq);
+	public BoardModel get(int boardSeq) {
+		return boardDao.get(boardSeq);
 	};
 	
 	/**
@@ -47,13 +47,13 @@ public class BoardService {
 	 * 등록 처리.
 	 * @return 
 	 */
-	public void save(BoardParameter parameter) {
+	public void insert(BoardParameter parameter) {
 		// 조회하여 리턴된 정보
-		Board board = repository.get(parameter.getBoardSeq());
+		BoardModel board = boardDao.get(parameter.getBoardSeq());
 		if (board == null) {
-			repository.save(parameter);
+			boardDao.insert(parameter);
 		} else {
-			repository.update(parameter);
+			boardDao.update(parameter);
 		}
 	};
 
@@ -63,7 +63,7 @@ public class BoardService {
 	 * 삭제 처리.
 	 */
 	public void delete(int boardSeq) {
-		repository.delete(boardSeq);
+		boardDao.delete(boardSeq);
 	};
 	
 }
