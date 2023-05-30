@@ -14,4 +14,6 @@ public class StateGetDto {
 	private String firstState;
 	private String secondState;
 	private String thirdState;
+	private String templete;
+	private String msg;
 }

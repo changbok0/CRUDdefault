@@ -27,9 +27,17 @@
         )
         VALUES
         <foreach collection="list" item="item" separator=" , " >
-        	(concat(#{item.title},#{item.contents},#{item.regDate},' ','임시 메세지 내용입니다.'),NOW())
+        	(#{item.templete},NOW())
         </foreach>
 	</insert>
 
+	<select id="getTemplete" resultType="com.example.mvc.parameter.StateGetDto">	
+		SELECT
+				title,
+				templete,
+				tempNum
+	    FROM templete
+	    WHERE tempNum = 3  
+	</select>
 	
 </mapper>

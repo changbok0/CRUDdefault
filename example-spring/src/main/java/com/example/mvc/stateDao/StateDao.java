@@ -12,4 +12,6 @@ public interface StateDao {
 	List<StateGetDto> getStateList();
 	
 	void insertState(List<StateGetDto> stateGetDto);
+
+	List<StateGetDto> getTemplete();
 }

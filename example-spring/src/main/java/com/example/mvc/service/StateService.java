@@ -1,9 +1,7 @@
 package com.example.mvc.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -27,19 +25,31 @@ public class StateService {
 	@Autowired
 	private StateDao stateDao;
 	
-	@Scheduled(cron = "0 34 15 * * *")
+	@Scheduled(cron = "0 0 23 * * *")
 	public void batchProcess() {
 		List<StateGetDto> stateList = stateDao.getStateList();
-		System.out.println("stateList ===" + stateList );
-		log.info("stateList === {}", stateList);
+		List<StateGetDto> sList = new ArrayList<>();
+		List<StateGetDto> tList = stateDao.getTemplete();
 		
 		if(stateList != null) {
-			List<StateGetDto> sList = new ArrayList<>();
-			for (StateGetDto state : stateList) {
-				sList.add(state);
-				log.info("State: {}", sList);
-			}			
-			stateDao.insertState(sList);
+			for (StateGetDto state : stateList) {				
+				 for (StateGetDto templeteDto : tList) {
+					 if(templeteDto != null) {
+						 String templete = templeteDto.getTemplete();		                
+						 templete = templete.replace("#{title}", state.getTitle())
+								 			.replace("#{contents}", state.getContents());
+						 state.setTemplete(templete);
+						 sList.add(state);
+						 break;
+					 }
+	             	}
+			}
+			try {
+				stateDao.insertState(sList);
+				log.info("State: {}", sList);				
+			} catch (Exception e) {
+				log.error("Error : {}", e.getMessage());
+			}
 		}
 	}
 }
